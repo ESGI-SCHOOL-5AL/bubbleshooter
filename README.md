@@ -16,3 +16,6 @@ https://soundcloud.com/stevenobrien/short-upbeat-piece-for-guitar
 https://soundcloud.com/stevenobrien/utopian-theme-2010
 
 https://soundcloud.com/stevenobrien/goofy-theme-2010
+
+## Install
+pip -r requirements.txt
