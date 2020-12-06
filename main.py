@@ -167,7 +167,7 @@ def main():
     global FPSCLOCK, DISPLAYSURF, DISPLAYRECT, MAINFONT
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
-    pygame.display.set_caption('Puzzle Bobble')
+    pygame.display.set_caption('Puzzle Bubble')
     MAINFONT = pygame.font.SysFont('Helvetica', TEXTHEIGHT)
     DISPLAYSURF, DISPLAYRECT = makeDisplay()
     
