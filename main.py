@@ -11,7 +11,7 @@ print("VERSION")
 print(sys.version)
 
 # OUR QISKIT IMPORTS TO REPRODUCE QUANTIC MECANIC
-import qiskit
+from qiskit import *
 # from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 # from qiskit import Aer, execute
 # from qiskit.tools.visualization import plot_state_city
@@ -33,6 +33,7 @@ STARTY = WINDOWHEIGHT - 27
 ARRAYWIDTH = 16
 ARRAYHEIGHT = 14
 
+MAX = 3  # 8 colors
 
 RIGHT = 'right'
 LEFT  = 'left'
@@ -55,7 +56,7 @@ BLACK    = (  0,   0,   0)
 COMBLUE  = (233, 232, 255)
 
 BGCOLOR    = WHITE
-COLORLIST = [RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE, CYAN]
+COLORLIST = [RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE, CYAN, NAVYBLUE]
      
 
 class Bubble(pygame.sprite.Sprite):
@@ -257,13 +258,13 @@ def runGame():
                         
             
             gameColorList = updateColorList(bubbleArray)
-            random.shuffle(gameColorList)
+            # random.shuffle(gameColorList)
             
                     
                             
             if launchBubble == False:
                 
-                nextBubble = Bubble(gameColorList[0])
+                nextBubble = Bubble(gameColorList[random_int()])
                 nextBubble.rect.right = WINDOWWIDTH - 5
                 nextBubble.rect.bottom = WINDOWHEIGHT - 5
 
@@ -318,8 +319,8 @@ def makeBlankBoard():
 def setBubbles(array, gameColorList):
     for row in range(BUBBLELAYERS):
         for column in range(len(array[row])):
-            random.shuffle(gameColorList)
-            newBubble = Bubble(gameColorList[0], row, column)
+            # random.shuffle(gameColorList)
+            newBubble = Bubble(gameColorList[random_int()], row, column)
             array[row][column] = newBubble 
             
     setArrayPos(array)
@@ -672,6 +673,30 @@ def endScreen(score, winorlose):
                 elif event.key == K_ESCAPE:
                     terminate()
         
+
+def bit_from_counts(counts):
+    for k in counts:
+        if counts[k] == 1:
+            return k
+
+
+def random_int():
+    backend = Aer.get_backend('qasm_simulator')
+    bits = ''
+    for _ in range(MAX):
+        q = QuantumRegister(1)
+        c = ClassicalRegister(1)
+        qc = QuantumCircuit(q, c)
+
+        qc.h(q[0])
+        qc.measure(q, c)  # pylint: disable=no-member
+
+        job_sim = execute(qc, backend, shots=1)
+        sim_result = job_sim.result()
+        counts = sim_result.get_counts(qc)
+
+        bits += bit_from_counts(counts)
+    return int(bits, 2)
         
 if __name__ == '__main__':
     main()
